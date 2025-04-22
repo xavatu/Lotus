@@ -1,0 +1,29 @@
+%YAML 1.1
+---
+af-packet:
+  - interface: lo
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+
+outputs:
+  - console:
+      enabled: yes
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/suricata/eve.json
+      types:
+        - alert:
+            payload: yes
+            payload-printable: yes
+        - dns
+        - http
+        - tls
+
+logging:
+  default-log-level: info
+  outputs:
+    - console:
+        enabled: yes
+
