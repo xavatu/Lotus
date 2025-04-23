@@ -5,10 +5,29 @@ af-packet:
     cluster-id: 99
     cluster-type: cluster_flow
     defrag: yes
+    use-mmap: auto
+    host-mode: yes
+
+vars:
+  address-groups:
+    HOME_NET: "[127.0.0.1/32, ::1/128]"
+    EXTERNAL_NET: "any"
+    HTTP_SERVERS: "$HOME_NET"
+  port-groups:
+    HTTP_PORTS: "[8000]"
+
+default-rule-path: /etc/suricata/rules
+rule-files:
+  - suricata.rules
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      detection-only: no
+      ports: "$HTTP_PORTS"
 
 outputs:
-  - console:
-      enabled: yes
   - eve-log:
       enabled: yes
       filetype: regular
@@ -17,13 +36,12 @@ outputs:
         - alert:
             payload: yes
             payload-printable: yes
-        - dns
-        - http
-        - tls
+        - http:
+            extended: yes
+            include-body-for: ["application/json"]
 
 logging:
   default-log-level: info
   outputs:
     - console:
         enabled: yes
-

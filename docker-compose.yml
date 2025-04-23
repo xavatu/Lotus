@@ -15,12 +15,12 @@ services:
       - ./suricata/config:/etc/suricata
       - ./suricata/rules:/etc/suricata/rules
     command:
+      - -c
+      - /etc/suricata/suricata.yaml
       - -i
       - lo
       - -l
       - /var/log/suricata
-      - -S
-      - /etc/suricata/suricata.yaml
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
