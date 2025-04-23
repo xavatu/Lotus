@@ -1,0 +1,27 @@
+packetbeat.interfaces:
+  device: lo
+
+packetbeat.protocols:
+  - type: http
+    ports: [ 8000 ]
+    send_request: true
+    send_response: true
+    include_body_for: [ "application/json", "text/html" ]
+
+processors:
+  - decode_json_fields:
+      fields: [ "http.request.body", "http.response.body" ]
+      target: ""
+  - dissect:
+      tokenizer: "%{method} %{url} HTTP/%{http.version}"
+      field: "http.request.raw"
+      target_prefix: "http"
+
+output.elasticsearch:
+  hosts: [ "elasticsearch:9200" ]
+  ssl.enabled: false
+  indices:
+    - index: "packetbeat-http-%{+yyyy.MM.dd}"
+
+setup.ilm.enabled: false
+setup.template.enabled: true

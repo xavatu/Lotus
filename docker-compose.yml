@@ -28,7 +28,7 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
     volumes:
       - elastic_data:/usr/share/elasticsearch/data
     ports:
@@ -43,6 +43,22 @@ services:
       - "5601:5601"
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+
+  packetbeat:
+    image: docker.elastic.co/beats/packetbeat:8.7.0
+    container_name: packetbeat
+    network_mode: host
+    extra_hosts:
+      - "elasticsearch:127.0.0.1"
+    depends_on:
+      - elasticsearch
+      - kibana
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+    volumes:
+      - ./packetbeat/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.7.0
