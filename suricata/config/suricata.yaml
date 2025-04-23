@@ -2,11 +2,10 @@
 ---
 af-packet:
   - interface: lo
-    cluster-id: 99
-    cluster-type: cluster_flow
-    defrag: yes
-    use-mmap: auto
     host-mode: yes
+    use-mmap: yes
+    tpacket-v3: yes
+    checksum-checks: no
 
 vars:
   address-groups:
