@@ -15,10 +15,12 @@ services:
       - ./suricata/config:/etc/suricata
       - ./suricata/rules:/etc/suricata/rules
     command:
+      - -q
+      - "0"
+#      - -i
+#      - lo
       - -c
       - /etc/suricata/suricata.yaml
-      - -i
-      - lo
       - -l
       - /var/log/suricata
 

@@ -1,12 +1,5 @@
 %YAML 1.1
 ---
-af-packet:
-  - interface: lo
-    host-mode: yes
-    use-mmap: yes
-    tpacket-v3: yes
-    checksum-checks: no
-
 vars:
   address-groups:
     HOME_NET: "[127.0.0.1/32, ::1/128]"
@@ -18,6 +11,21 @@ vars:
 default-rule-path: /etc/suricata/rules
 rule-files:
   - suricata.rules
+
+af-packet:
+  - interface: lo
+    host-mode: yes
+    use-mmap: yes
+    tpacket-v3: yes
+    checksum-checks: no
+
+nfq:
+  interface: lo
+  mode: accept
+  fail-open: no
+  threads: no
+  checksum-checks: no
+  defrag: yes
 
 app-layer:
   protocols:
@@ -38,6 +46,9 @@ outputs:
         - http:
             extended: yes
             include-body-for: ["application/json"]
+        - drop:
+            payload: yes
+            payload-printable: yes
 
 logging:
   default-log-level: info
