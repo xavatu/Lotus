@@ -13,16 +13,7 @@ services:
     volumes:
       - ./suricata/logs:/var/log/suricata
       - ./suricata/config:/etc/suricata
-      - ./suricata/rules:/etc/suricata/rules
-    command:
-      - -q
-      - "0"
-#      - -i
-#      - lo
-      - -c
-      - /etc/suricata/suricata.yaml
-      - -l
-      - /var/log/suricata
+    entrypoint: /etc/suricata/entrypoint.sh
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
